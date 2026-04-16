@@ -1,0 +1,30 @@
+@import "~/.config/rofi/applets/shared/fonts.rasi"
+@import "~/.config/rofi/applets/shared/colors.rasi"
+
+* {
+    font: "JetBrains Mono 11";
+    background-color:  @background;
+    text-color:        @foreground;
+}
+
+window {
+    transparency: "real";
+    location: center;
+    anchor: center;
+    width: 420px;
+    border-radius: 10px;
+    padding: 12px;
+    background-color: @background;
+    border: 2px solid;
+    border-color: @selected;
+}
+
+mainbox { children: [ "inputbar", "listview" ]; spacing: 10px; }
+inputbar { children: [ "prompt", "entry" ]; padding: 6px 10px; border-radius: 6px; background-color: @background-alt; }
+prompt { text-color: @selected; padding: 0 10px 0 0; }
+entry { text-color: @foreground; placeholder: "Pick a theme..."; }
+listview { lines: 6; spacing: 4px; cycle: true; }
+element { padding: 8px 10px; border-radius: 6px; }
+element selected { background-color: @selected; text-color: @background; }
+element-icon { size: 20px; padding: 0 10px 0 0; }
+element-text { vertical-align: 0.5; }
