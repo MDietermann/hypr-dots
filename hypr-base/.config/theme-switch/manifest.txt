@@ -1,0 +1,15 @@
+.config/hypr/hyprland/look_and_feel.conf
+.config/hypr/hyprlock.conf
+.config/hypr/hyprpaper.conf
+.config/kitty/kitty.conf
+.config/waybar/config
+.config/waybar/style.css
+.config/rofi/colors/colors.rasi
+.config/rofi/launchers/type-1/shared/colors.rasi
+.config/rofi/applets/shared/colors.rasi
+.config/rofi/powermenu/type-1/shared/colors.rasi
+.config/nvim/lua/plugins/colorscheme.lua
+.config/gtk-3.0/settings.ini
+.config/gtk-4.0/settings.ini
+.local/share/wallpapers
+.local/share/zsh/theme-colors.zsh

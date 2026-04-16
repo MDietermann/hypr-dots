@@ -78,5 +78,23 @@ case "$cmd" in
     fi
 
     command -v notify-send >/dev/null && notify-send "theme-switch" "applied: $new" || true
+
+    manifest="$HERE/../.config/theme-switch/manifest.txt"
+    [ -f "$manifest" ] || manifest="$HOME/.config/theme-switch/manifest.txt"
+    if [ -f "$manifest" ]; then
+      broken=()
+      while IFS= read -r rel; do
+        [ -z "$rel" ] && continue
+        p="$HOME/$rel"
+        if [ -e "$p" ] || [ -L "$p" ]; then
+          if ! readlink -e "$p" >/dev/null 2>&1 && [ -L "$p" ]; then
+            broken+=("$rel")
+          fi
+        fi
+      done < "$manifest"
+      if [ "${#broken[@]}" -gt 0 ]; then
+        _ts_err "manifest warnings (broken links): ${broken[*]}"
+      fi
+    fi
     exit 0 ;;
 esac
