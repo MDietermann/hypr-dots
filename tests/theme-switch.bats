@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
 load 'helpers'
 
-setup()    { setup_fake_dotfiles; }
-teardown() { teardown_fake_dotfiles; }
+setup()    { setup_fake_dotfiles; HOOK_CLEANUP=(); }
+teardown() { for f in "${HOOK_CLEANUP[@]:-}"; do rm -f "$f"; done; teardown_fake_dotfiles; }
 
 @test "--list returns theme names, excluding template" {
   make_fake_theme default
@@ -111,9 +111,9 @@ teardown() { teardown_fake_dotfiles; }
 echo "\$1" > "$marker"
 HEOF
   chmod +x "$hookdir/99-test.sh"
+  HOOK_CLEANUP+=("$hookdir/99-test.sh")
 
   run theme-switch nord
-  rm -f "$hookdir/99-test.sh"
 
   [ "$status" -eq 0 ]
   [ -f "$marker" ]
@@ -132,9 +132,9 @@ HEOF
 exit 7
 HEOF
   chmod +x "$hookdir/98-fail.sh"
+  HOOK_CLEANUP+=("$hookdir/98-fail.sh")
 
   run theme-switch nord
-  rm -f "$hookdir/98-fail.sh"
 
   [ "$status" -eq 0 ]
   [[ "$output" == *"hook failed: 98-fail.sh"* || "$stderr" == *"hook failed: 98-fail.sh"* ]]

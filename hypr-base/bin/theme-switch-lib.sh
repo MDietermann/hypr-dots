@@ -11,6 +11,7 @@ _ts_info()     { printf 'theme-switch: %s\n' "$*";         _ts_log_line "INFO $*
 ts_list_themes() {
   local d
   for d in "$THEME_SWITCH_ROOT"/theme-*/; do
+    [ -d "$d" ] || continue
     local base; base=$(basename "${d%/}")
     [ "$base" = "theme-template" ] && continue
     printf '%s\n' "${base#theme-}"

@@ -15,12 +15,13 @@ case "$cmd" in
     new="${1:-}"
     [ -n "$new" ] || { _ts_err "--dry-run requires a theme name"; exit 2; }
     [ -d "$THEME_SWITCH_ROOT/theme-$new" ] || { _ts_err "theme '$new' not found"; exit 1; }
+    [ "$new" = "template" ] && { _ts_err "theme 'template' is a skeleton, not applicable"; exit 1; }
     active=$(ts_current_theme)
     echo "PLAN:"
     echo "  stow -D theme-$active"
     echo "  stow -R theme-default"
     [ "$new" != "default" ] && echo "  stow --override='.*' theme-$new"
-    echo "  run hooks: $(ls "$(dirname "$0")"/theme-hooks.d/*.sh 2>/dev/null | xargs -n1 basename | paste -sd ' ')"
+    echo "  run hooks: $(ls "$HERE"/theme-hooks.d/*.sh 2>/dev/null | xargs -n1 basename | paste -sd ' ')"
     exit 0 ;;
   --rollback)
     prev_file="$THEME_SWITCH_STATE/previous"
