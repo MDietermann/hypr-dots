@@ -40,3 +40,19 @@ teardown() { teardown_fake_dotfiles; }
   [ "$status" -eq 1 ]
   [[ "$stderr" == *"not found"* || "$output" == *"not found"* ]]
 }
+
+@test "--dry-run prints plan, mutates nothing" {
+  make_fake_theme default
+  make_fake_theme nord
+  echo default > "$HOME/.local/state/theme-switch/active"
+
+  run theme-switch --dry-run nord
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"stow -D theme-default"* ]]
+  [[ "$output" == *"stow -R theme-default"* ]]
+  [[ "$output" == *"stow --override"* ]]
+  [[ "$output" == *"theme-nord"* ]]
+
+  # state/active unchanged
+  [ "$(cat "$HOME/.local/state/theme-switch/active")" = "default" ]
+}

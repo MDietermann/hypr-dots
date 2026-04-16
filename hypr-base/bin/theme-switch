@@ -10,7 +10,18 @@ cmd="${1:-}"
 case "$cmd" in
   --list)     ts_list_themes; exit 0 ;;
   --current)  ts_current_theme; exit 0 ;;
-  --dry-run)  shift; _ts_err "not implemented"; exit 2 ;;
+  --dry-run)
+    shift
+    new="${1:-}"
+    [ -n "$new" ] || { _ts_err "--dry-run requires a theme name"; exit 2; }
+    [ -d "$THEME_SWITCH_ROOT/theme-$new" ] || { _ts_err "theme '$new' not found"; exit 1; }
+    active=$(ts_current_theme)
+    echo "PLAN:"
+    echo "  stow -D theme-$active"
+    echo "  stow -R theme-default"
+    [ "$new" != "default" ] && echo "  stow --override='.*' theme-$new"
+    echo "  run hooks: $(ls "$(dirname "$0")"/theme-hooks.d/*.sh 2>/dev/null | xargs -n1 basename | paste -sd ' ')"
+    exit 0 ;;
   --rollback) _ts_err "not implemented"; exit 2 ;;
   "")         _ts_err "usage: theme-switch <name|--list|--current|--dry-run NAME|--rollback>"; exit 2 ;;
   -*)         _ts_err "unknown option: $cmd"; exit 2 ;;
