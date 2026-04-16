@@ -97,3 +97,46 @@ teardown() { teardown_fake_dotfiles; }
   [ "$status" -eq 1 ]
   [[ "$output" == *"already running"* ]]
 }
+
+@test "hooks: drop-in hook receives theme name as \$1" {
+  make_fake_theme default
+  make_fake_theme nord
+  ( cd "$STOW_DIR" && stow -t "$HOME" theme-default )
+  echo default > "$HOME/.local/state/theme-switch/active"
+
+  local hookdir="$REPO_ROOT/hypr-base/bin/theme-hooks.d"
+  local marker="$HOME/hook-ran"
+  cat > "$hookdir/99-test.sh" <<HEOF
+#!/usr/bin/env bash
+echo "\$1" > "$marker"
+HEOF
+  chmod +x "$hookdir/99-test.sh"
+
+  run theme-switch nord
+  rm -f "$hookdir/99-test.sh"
+
+  [ "$status" -eq 0 ]
+  [ -f "$marker" ]
+  [ "$(cat "$marker")" = "nord" ]
+}
+
+@test "hooks: a failing hook is logged but doesn't abort the switch" {
+  make_fake_theme default
+  make_fake_theme nord
+  ( cd "$STOW_DIR" && stow -t "$HOME" theme-default )
+  echo default > "$HOME/.local/state/theme-switch/active"
+
+  local hookdir="$REPO_ROOT/hypr-base/bin/theme-hooks.d"
+  cat > "$hookdir/98-fail.sh" <<'HEOF'
+#!/usr/bin/env bash
+exit 7
+HEOF
+  chmod +x "$hookdir/98-fail.sh"
+
+  run theme-switch nord
+  rm -f "$hookdir/98-fail.sh"
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"hook failed: 98-fail.sh"* || "$stderr" == *"hook failed: 98-fail.sh"* ]]
+  [ "$(cat "$HOME/.local/state/theme-switch/active")" = "nord" ]
+}
