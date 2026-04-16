@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+HERE=$(dirname "$(readlink -f "$0")")
+# shellcheck source=./theme-switch-lib.sh
+source "$HERE/theme-switch-lib.sh"
+
+mkdir -p "$THEME_SWITCH_STATE"
+
+cmd="${1:-}"
+case "$cmd" in
+  --list)     ts_list_themes; exit 0 ;;
+  --current)  ts_current_theme; exit 0 ;;
+  --dry-run)  shift; _ts_err "not implemented"; exit 2 ;;
+  --rollback) _ts_err "not implemented"; exit 2 ;;
+  "")         _ts_err "usage: theme-switch <name|--list|--current|--dry-run NAME|--rollback>"; exit 2 ;;
+  -*)         _ts_err "unknown option: $cmd"; exit 2 ;;
+  *)          _ts_err "apply not yet implemented"; exit 2 ;;
+esac
