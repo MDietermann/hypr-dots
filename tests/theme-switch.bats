@@ -17,3 +17,19 @@ teardown() { teardown_fake_dotfiles; }
   [[ "$output" == *"dracula"* ]]
   [[ "$output" != *"template"* ]]
 }
+
+@test "--current returns 'default' when no state" {
+  make_fake_theme default
+  run theme-switch --current
+  [ "$status" -eq 0 ]
+  [ "$output" = "default" ]
+}
+
+@test "--current returns written state" {
+  make_fake_theme nord
+  echo nord > "$HOME/.local/state/theme-switch/active"
+  export THEME_SWITCH_STATE="$HOME/.local/state/theme-switch"
+  run theme-switch --current
+  [ "$status" -eq 0 ]
+  [ "$output" = "nord" ]
+}
