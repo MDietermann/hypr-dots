@@ -3,8 +3,6 @@ load '../helpers'
 
 setup() {
   setup_fake_dotfiles
-  export REPO_ROOT="$BATS_TEST_DIRNAME/../.."
-  export PATH="$REPO_ROOT/hypr-base/bin:$REPO_ROOT/tests/stubs:$PATH"
   export THEME_SWITCH_TEST_LOG="$TMP_ROOT/calls.log"; : > "$THEME_SWITCH_TEST_LOG"
   make_fake_theme nord
   mkdir -p "$STOW_DIR/theme-nord/.config/hypr"

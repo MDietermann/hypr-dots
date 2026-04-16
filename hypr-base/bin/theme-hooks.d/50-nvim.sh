@@ -8,7 +8,8 @@ root="${THEME_SWITCH_ROOT:-$HOME/hypr-dots}"
 meta="$root/theme-$theme/meta.toml"
 cs="$theme"
 if [ -r "$meta" ]; then
-  cs=$(awk -F'=' '/^[[:space:]]*colorscheme[[:space:]]*=/ { gsub(/^[[:space:]]+|[[:space:]]+$|"/, "", $2); print $2; exit }' "$meta") || cs="$theme"
+  cs=$(awk -F'=' '/^[[:space:]]*colorscheme[[:space:]]*=/ { gsub(/^[[:space:]]+|[[:space:]]+$|"/, "", $2); print $2; exit }' "$meta")
+  [ -n "$cs" ] || cs="$theme"
 fi
 
 runtime="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"

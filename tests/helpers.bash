@@ -7,7 +7,8 @@ setup_fake_dotfiles() {
   export STOW_DIR="$HOME/hypr-dots"
   mkdir -p "$HOME"
   mkdir -p "$STOW_DIR" "$HOME/.config" "$HOME/.local/state/theme-switch"
-  export REPO_ROOT="$BATS_TEST_DIRNAME/.."
+  local _helpers_dir; _helpers_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  export REPO_ROOT="$_helpers_dir/.."
   export PATH="$REPO_ROOT/hypr-base/bin:$REPO_ROOT/tests/stubs:$PATH"
   export THEME_SWITCH_ROOT="$STOW_DIR"
 }

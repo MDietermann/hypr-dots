@@ -7,4 +7,6 @@ meta="$root/theme-$theme/meta.toml"
 [ -r "$meta" ] || exit 0
 read_meta() { awk -F'=' -v k="$1" '$1 ~ "^[[:space:]]*"k"[[:space:]]*$" { gsub(/^[[:space:]]+|[[:space:]]+$|"/, "", $2); print $2; exit }' "$meta"; }
 cursor=$(read_meta cursor_theme); size=$(read_meta cursor_size)
-[ -n "$cursor" ] && [ -n "$size" ] && hyprctl setcursor "$cursor" "$size" >/dev/null || true
+if [ -n "$cursor" ] && [ -n "$size" ]; then
+  hyprctl setcursor "$cursor" "$size" >/dev/null || true
+fi

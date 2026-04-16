@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 load '../helpers'
 
-setup()    { setup_fake_dotfiles; export REPO_ROOT="$BATS_TEST_DIRNAME/../.."; export PATH="$REPO_ROOT/hypr-base/bin:$REPO_ROOT/tests/stubs:$PATH"; }
+setup()    { setup_fake_dotfiles; }
 teardown() { teardown_fake_dotfiles; }
 
 @test "80-zsh: writes a marker file with mtime" {
