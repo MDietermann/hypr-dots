@@ -10,15 +10,15 @@ source "$HOME"/.config/rofi/applets/shared/theme.bash
 theme="$type/$style"
 
 # Volume Info
-mixer="$(amixer info Master | grep 'Mixer name' | cut -d':' -f2 | tr -d \',' ')"
-speaker="$(amixer get Master | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]')"
-mic="$(amixer get Capture | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]')"
+mixer="$(amixer -c 1 info Master | grep 'Mixer name' | cut -d':' -f2 | tr -d \',' ')"
+speaker="$(amixer -c 1 get Master | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]')"
+mic="$(amixer -c 1 get Capture | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]')"
 
 active=""
 urgent=""
 
 # Speaker Info
-amixer get Master | grep '\[on\]' &>/dev/null
+amixer -c 1 get Master | grep '\[on\]' &>/dev/null
 if [[ "$?" == 0 ]]; then
   active="-a 1"
   stext='Unmute'
@@ -30,7 +30,7 @@ else
 fi
 
 # Microphone Info
-amixer get Capture | grep '\[on\]' &>/dev/null
+amixer -c 1 get Capture | grep '\[on\]' &>/dev/null
 if [[ "$?" == 0 ]]; then
   [ -n "$active" ] && active+=",3" || active="-a 3"
   mtext='Unmute'
@@ -66,11 +66,11 @@ fi
 # Options
 layout=$(cat ${theme} | grep 'USE_ICON' | cut -d'=' -f2)
 if [[ "$layout" == 'NO' ]]; then
-  option_1=" Increase"
+  option_1="   Increase"
   option_2="$sicon $stext"
-  option_3=" Decrese"
+  option_3="   Decrese"
   option_4="$micon $mtext"
-  option_5=" Settings"
+  option_5="   Settings"
 else
   option_1=""
   option_2="$sicon"
@@ -100,13 +100,13 @@ run_rofi() {
 # Execute Command
 run_cmd() {
   if [[ "$1" == '--opt1' ]]; then
-    amixer -Mq set Master,0 5%+ unmute
+    amixer -c 1 -Mq set Master,0 5%+ unmute
   elif [[ "$1" == '--opt2' ]]; then
-    amixer set Master toggle
+    amixer -c 1 set Master toggle
   elif [[ "$1" == '--opt3' ]]; then
-    amixer -Mq set Master,0 5%- unmute
+    amixer -c 1 -Mq set Master,0 5%- unmute
   elif [[ "$1" == '--opt4' ]]; then
-    amixer set Capture toggle
+    amixer -c 1 set Capture toggle
   elif [[ "$1" == '--opt5' ]]; then
     pavucontrol
   fi
