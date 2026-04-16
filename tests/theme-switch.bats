@@ -78,3 +78,22 @@ teardown() { teardown_fake_dotfiles; }
     "$STOW_DIR/theme-nord/.config/theme-switch-test/marker" ]
   [ "$(cat "$HOME/.local/state/theme-switch/active")" = "nord" ]
 }
+
+@test "flock: second concurrent run fails fast" {
+  make_fake_theme default
+  make_fake_theme nord
+  ( cd "$STOW_DIR" && stow -t "$HOME" theme-default )
+  echo default > "$HOME/.local/state/theme-switch/active"
+
+  # hold the lock in background
+  ( exec 200>"$HOME/.local/state/theme-switch/lock"; flock -x 200; sleep 0.5 ) &
+  bg_pid=$!
+  sleep 0.1
+
+  run theme-switch nord
+  kill $bg_pid 2>/dev/null || true
+  wait 2>/dev/null || true
+
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"already running"* ]]
+}
