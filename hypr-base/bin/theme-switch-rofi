@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+HERE=$(dirname "$(readlink -f "$0")")
+# shellcheck source=./theme-switch-lib.sh
+source "$HERE/theme-switch-lib.sh"
+
+command -v rofi >/dev/null || { theme-switch --list; exit 1; }
+
+style="$HOME/.config/rofi/applets/type-5/theme-switch.rasi"
+cache="$HOME/.cache/theme-switch"
+mkdir -p "$cache"
+
+current=$(ts_current_theme)
+declare -a entries
+while IFS= read -r t; do
+  desc=$(ts_meta_value "$t" description || echo "")
+  accent=$(ts_meta_value "$t" accent || echo "#888")
+  icon="$cache/$t.png"
+  if [ ! -s "$icon" ] && command -v magick >/dev/null; then
+    magick -size 32x32 "xc:$accent" "$icon" >/dev/null 2>&1 || rm -f "$icon"
+  fi
+  [ -s "$icon" ] || icon=""
+  marker=""
+  [ "$t" = "$current" ] && marker=" (current)"
+  label="$t — $desc$marker"
+  entries+=("$label\0icon\x1f$icon")
+done < <(ts_list_themes)
+
+pick=$(printf '%b\n' "${entries[@]}" \
+       | rofi -dmenu -i -theme "$style" -p "theme" -format s)
+[ -n "$pick" ] || exit 0
+chosen=$(printf '%s' "$pick" | awk -F' — ' '{print $1}' | tr -d ' ')
+
+confirm=$(printf 'Yes\nNo\n' | rofi -dmenu -i -theme "$style" -p "Apply $chosen?")
+[ "$confirm" = "Yes" ] || exit 0
+
+exec theme-switch "$chosen"
