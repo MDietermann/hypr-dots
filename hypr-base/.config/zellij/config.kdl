@@ -1,0 +1,24 @@
+theme "current"
+default_layout "default"
+default_mode "normal"
+simplified_ui false
+mouse_mode false
+
+ui {
+  pane_frames {
+    rounded_corners true
+  }
+}
+
+keybinds {
+    shared {
+        bind "Alt h" { MoveFocusOrTab "Left"; }
+        bind "Alt l" { MoveFocusOrTab "Right"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+        bind "Alt n" { NewPane "Down"; }
+        bind "Alt v" { NewPane "Right"; }
+        bind "Alt f" { ToggleFloatingPanes; }
+        bind "Alt t" { NewTab; }
+    }
+}

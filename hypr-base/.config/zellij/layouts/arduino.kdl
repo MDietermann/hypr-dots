@@ -1,0 +1,22 @@
+layout {
+    tab name="code" focus=true {
+        pane split_direction="vertical" {
+            pane size="65%" {
+                command "nvim"
+                args "."
+            }
+            pane split_direction="horizontal" {
+                pane size="60%" name="terminal"
+                pane size="40%" name="serial" {
+                    command "bash"
+                    args "-c" "echo '⚡ Serial — run: tio /dev/ttyUSB0 -b 115200'"
+                }
+            }
+        }
+    }
+    tab name="git" {
+        pane {
+            command "lazygit"
+        }
+    }
+}

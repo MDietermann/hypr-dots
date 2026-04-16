@@ -1,0 +1,25 @@
+layout {
+  tab name="SSH Hive-Brain.de" {
+    pane size=1 borderless=true {
+      plugin location="tab-bar"
+    }
+    pane {
+      pane split_direction="vertical" {
+        pane size="50%" {
+          command "ssh"
+          args "marvin@91.99.27.147"
+        }
+
+        pane split_direction="horizontal" {
+          pane size="60%" name="terminal"
+          pane size="40%" name="claude" cwd="~/claude" {
+            command "claude" 
+          }
+        }
+      }
+    }
+    pane size=1 borderless=true {
+      plugin location="status-bar"
+    }
+  }
+}
