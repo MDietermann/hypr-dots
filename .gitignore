@@ -1,0 +1,7 @@
+
+# theme-switch runtime state
+state/active
+state/previous
+state/lock
+state/log
+state/log.1
