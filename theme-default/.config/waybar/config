@@ -11,7 +11,11 @@
     "disable-scroll": true,
     "all-outputs": true,
     "warp-on-scroll": false,
-    "format": "{name}"
+    "format": "{id}",
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "*": 5
+    }
   },
   "pulseaudio": {
     "format": "{volume}% {icon}",
