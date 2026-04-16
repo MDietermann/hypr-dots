@@ -1,0 +1,9 @@
+name          = "Dracula"
+description   = "purples · neon accents"
+accent        = "#bd93f9"
+preview       = ".local/share/wallpapers/dracula.png"
+colorscheme   = "dracula"
+gtk_theme     = "Dracula"
+icon_theme    = "Adwaita"
+cursor_theme  = "Adwaita"
+cursor_size   = 24
