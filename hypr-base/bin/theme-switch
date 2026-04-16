@@ -22,7 +22,14 @@ case "$cmd" in
     [ "$new" != "default" ] && echo "  stow --override='.*' theme-$new"
     echo "  run hooks: $(ls "$(dirname "$0")"/theme-hooks.d/*.sh 2>/dev/null | xargs -n1 basename | paste -sd ' ')"
     exit 0 ;;
-  --rollback) _ts_err "not implemented"; exit 2 ;;
+  --rollback)
+    prev_file="$THEME_SWITCH_STATE/previous"
+    if [ ! -s "$prev_file" ]; then
+      _ts_err "nothing to roll back to"
+      exit 1
+    fi
+    prev=$(cat "$prev_file")
+    exec "$0" "$prev" ;;
   "")         _ts_err "usage: theme-switch <name|--list|--current|--dry-run NAME|--rollback>"; exit 2 ;;
   -*)         _ts_err "unknown option: $cmd"; exit 2 ;;
   *)

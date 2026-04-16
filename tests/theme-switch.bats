@@ -140,3 +140,25 @@ HEOF
   [[ "$output" == *"hook failed: 98-fail.sh"* || "$stderr" == *"hook failed: 98-fail.sh"* ]]
   [ "$(cat "$HOME/.local/state/theme-switch/active")" = "nord" ]
 }
+
+@test "--rollback restores previous theme" {
+  make_fake_theme default
+  make_fake_theme nord
+  make_fake_theme dracula
+  ( cd "$STOW_DIR" && stow -t "$HOME" theme-default )
+
+  echo default > "$HOME/.local/state/theme-switch/active"
+  theme-switch nord
+  theme-switch dracula
+
+  run theme-switch --rollback
+  [ "$status" -eq 0 ]
+  [ "$(cat "$HOME/.local/state/theme-switch/active")" = "nord" ]
+}
+
+@test "--rollback without previous fails cleanly" {
+  make_fake_theme default
+  run theme-switch --rollback
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"nothing to roll back"* || "$stderr" == *"nothing to roll back"* ]]
+}
