@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+tool=$(basename "$0")
+log="${THEME_SWITCH_TEST_LOG:-/tmp/theme-switch-test-calls.log}"
+{
+  printf '%s' "$tool"
+  for a in "$@"; do printf ' %q' "$a"; done
+  printf '\n'
+} >> "$log"
+exit 0
