@@ -70,7 +70,7 @@ ZSH_THEME="fino-time"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git archlinux fzf)
+plugins=(git archlinux fzf zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,19 +102,89 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
 
+
+
+
+# ── ARCHDUINO CONFIG ────────────────────────────────────────────
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+
+export PATH="$HOME/.local/bin:$PATH"
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+eval "$(starship init zsh)"
+
+# Auto-start Zellij (disabled)
+# if [[ -z "$ZELLIJ" ]]; then
+#   zellij attach --create archduino
+# fi
+
+# Arduino aliases
+alias adev="zellij --layout arduino"
+alias ac="arduino-cli"
+alias acc="arduino-cli compile"
+alias acu="arduino-cli upload"
+alias acm="arduino-cli monitor"
+alias acb="arduino-cli board list"
+alias lg="lazygit"
+alias v="nvim"
+alias y="yazi"
+alias theme="archduino-theme"
+# ── END ARCHDUINO ───────────────────────────────────────────────
+
+# bun completions
+[ -s "/home/marvin/.bun/_bun" ] && source "/home/marvin/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+. "$HOME/.local/share/../bin/env"
+
+alias claude-mem='/home/marvin/.bun/bin/bun "/home/marvin/.claude/plugins/cache/thedotmack/claude-mem/12.1.0/scripts/worker-service.cjs"'
+# >>> archduino-path >>>
+export PATH="$HOME/.local/bin:$PATH"
+# <<< archduino-path <<<
+# >>> archduino-editor >>>
+export EDITOR="nvim"
+export VISUAL="nvim"
+# <<< archduino-editor <<<
+# >>> archduino-starship >>>
+eval "$(starship init zsh)"
+# <<< archduino-starship <<<
+# >>> archduino-zellij >>>
+# if [[ -z "$ZELLIJ" ]]; then
+#   zellij attach --create archduino
+# fi
+# <<< archduino-zellij <<<
+# >>> archduino-aliases >>>
+alias adev="zellij --layout arduino"
+alias ac="arduino-cli"
+alias acc="arduino-cli compile"
+alias acu="arduino-cli upload"
+alias acm="arduino-cli monitor"
+alias acb="arduino-cli board list"
+alias lg="lazygit"
+alias v="nvim"
+alias y="yazi"
+alias theme="archduino-theme"
+# <<< archduino-aliases <<<cat >> ~/hypr-dots/hypr-base/.zshrc <<'EOF'                                       
+                                                                                    
 # --- theme-switch integration ---
-_theme_colors_file="$HOME/.local/share/zsh/theme-colors.zsh"
-_theme_colors_marker="$HOME/.local/state/theme-switch/zsh-marker"
+_theme_colors_file="$HOME/.local/share/zsh/theme-colors.zsh"                      
+_theme_colors_marker="$HOME/.local/state/theme-switch/zsh-marker"                 
 [ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
-_theme_colors_precmd() {
-  [ -f "$_theme_colors_marker" ] || return 0
-  local mtime
+_theme_colors_precmd() {                                                          
+  [ -f "$_theme_colors_marker" ] || return 0              
+  local mtime                                                                     
   mtime=$(stat -c %Y "$_theme_colors_marker" 2>/dev/null) || return 0
-  if [ "$mtime" != "${_theme_colors_seen:-}" ]; then
+  if [ "$mtime" != "${_theme_colors_seen:-}" ]; then                              
     [ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
-    _theme_colors_seen="$mtime"
-  fi
-}
-autoload -Uz add-zsh-hook
+    _theme_colors_seen="$mtime"                                                   
+  fi                                                      
+}                                                                                 
+autoload -Uz add-zsh-hook                                 
 add-zsh-hook precmd _theme_colors_precmd
