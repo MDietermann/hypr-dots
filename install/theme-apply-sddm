@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+name="${1:?theme name required}"
+# Hard-coded user dotfiles path; adjust if multi-user.
+root="/home/marvin/hypr-dots"
+[ -d "$root/theme-$name" ] || { printf 'unknown theme: %s\n' "$name" >&2; exit 2; }
+
+if [ -d "$root/theme-$name/usr/share/sddm/themes/$name" ]; then
+  rsync -a --delete "$root/theme-$name/usr/share/sddm/themes/$name/" \
+                    "/usr/share/sddm/themes/$name/"
+fi
+
+mkdir -p /etc/sddm.conf.d
+tmp=$(mktemp)
+printf '[Theme]\nCurrent=%s\n' "$name" > "$tmp"
+install -m 0644 "$tmp" /etc/sddm.conf.d/10-theme.conf
+rm -f "$tmp"
