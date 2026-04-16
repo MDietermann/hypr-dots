@@ -32,5 +32,44 @@ case "$cmd" in
       _ts_err "theme '$new' not found. available: $available"
       exit 1
     fi
-    _ts_err "apply flow not yet implemented"; exit 2 ;;
+
+    mkdir -p "$THEME_SWITCH_STATE"
+    exec 200>"$THEME_SWITCH_STATE/lock"
+    flock -n 200 || { _ts_err "theme-switch already running"; exit 1; }
+
+    active=$(ts_current_theme)
+
+    trap '_ts_err "switch failed; reverting to default"; ( cd "$THEME_SWITCH_ROOT" && stow -R theme-default -t "$HOME" ) || true; exit 1' ERR
+
+    (
+      cd "$THEME_SWITCH_ROOT"
+      stow -D "theme-$active" -t "$HOME" 2>/dev/null || true
+      stow -R theme-default -t "$HOME"
+      if [ "$new" != "default" ]; then
+        stow --override='.*' "theme-$new" -t "$HOME"
+      fi
+    )
+
+    echo "$active" > "$THEME_SWITCH_STATE/previous"
+    echo "$new"    > "$THEME_SWITCH_STATE/active"
+    _ts_info "applied theme: $new (from $active)"
+
+    hookdir="$HERE/theme-hooks.d"
+    failed_hooks=()
+    if [ -d "$hookdir" ]; then
+      for h in "$hookdir"/*.sh; do
+        [ -r "$h" ] || continue
+        if ! bash "$h" "$new"; then
+          failed_hooks+=("$(basename "$h")")
+          _ts_err "hook failed: $(basename "$h")"
+        fi
+      done
+    fi
+
+    if [ "${#failed_hooks[@]}" -gt 0 ]; then
+      _ts_err "applied with ${#failed_hooks[@]} hook failures: ${failed_hooks[*]}"
+    fi
+
+    command -v notify-send >/dev/null && notify-send "theme-switch" "applied: $new" || true
+    exit 0 ;;
 esac

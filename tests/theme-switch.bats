@@ -56,3 +56,25 @@ teardown() { teardown_fake_dotfiles; }
   # state/active unchanged
   [ "$(cat "$HOME/.local/state/theme-switch/active")" = "default" ]
 }
+
+@test "apply: default→nord moves symlinks into theme-nord" {
+  make_fake_theme default
+  make_fake_theme nord
+
+  # initial stow so theme-default is the current overlay
+  ( cd "$STOW_DIR" && stow -t "$HOME" theme-default )
+
+  # sanity: marker now points into theme-default
+  [ "$(readlink -f "$HOME/.config/theme-switch-test/marker")" = \
+    "$STOW_DIR/theme-default/.config/theme-switch-test/marker" ]
+
+  echo default > "$HOME/.local/state/theme-switch/active"
+
+  run env THEME_SWITCH_ROOT="$STOW_DIR" \
+      THEME_SWITCH_STATE="$HOME/.local/state/theme-switch" \
+      theme-switch nord
+  [ "$status" -eq 0 ]
+  [ "$(readlink -f "$HOME/.config/theme-switch-test/marker")" = \
+    "$STOW_DIR/theme-nord/.config/theme-switch-test/marker" ]
+  [ "$(cat "$HOME/.local/state/theme-switch/active")" = "nord" ]
+}
