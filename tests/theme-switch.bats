@@ -33,3 +33,10 @@ teardown() { teardown_fake_dotfiles; }
   [ "$status" -eq 0 ]
   [ "$output" = "nord" ]
 }
+
+@test "apply: unknown theme exits 1 with helpful message" {
+  make_fake_theme default
+  run theme-switch foo
+  [ "$status" -eq 1 ]
+  [[ "$stderr" == *"not found"* || "$output" == *"not found"* ]]
+}
