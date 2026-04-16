@@ -102,3 +102,16 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# --- theme-switch integration ---
+_theme_colors_file="$HOME/.local/share/zsh/theme-colors.zsh"
+_theme_colors_marker="$HOME/.local/state/theme-switch/zsh-marker"
+[ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
+_theme_colors_precmd() {
+  if [ -f "$_theme_colors_marker" ] && [ "$_theme_colors_marker" -nt "${_theme_colors_seen:-/dev/null}" ]; then
+    [ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
+    _theme_colors_seen="$_theme_colors_marker"
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _theme_colors_precmd
