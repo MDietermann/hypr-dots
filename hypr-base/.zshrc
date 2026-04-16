@@ -108,9 +108,12 @@ _theme_colors_file="$HOME/.local/share/zsh/theme-colors.zsh"
 _theme_colors_marker="$HOME/.local/state/theme-switch/zsh-marker"
 [ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
 _theme_colors_precmd() {
-  if [ -f "$_theme_colors_marker" ] && [ "$_theme_colors_marker" -nt "${_theme_colors_seen:-/dev/null}" ]; then
+  [ -f "$_theme_colors_marker" ] || return 0
+  local mtime
+  mtime=$(stat -c %Y "$_theme_colors_marker" 2>/dev/null) || return 0
+  if [ "$mtime" != "${_theme_colors_seen:-}" ]; then
     [ -f "$_theme_colors_file" ] && source "$_theme_colors_file"
-    _theme_colors_seen="$_theme_colors_marker"
+    _theme_colors_seen="$mtime"
   fi
 }
 autoload -Uz add-zsh-hook
