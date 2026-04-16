@@ -9,7 +9,12 @@ wall=$(awk -F'=' '/^[[:space:]]*preload[[:space:]]*=/ { gsub(/^[[:space:]]+|[[:s
 wall="${wall/#\~/$HOME}"
 hyprctl hyprpaper unload all >/dev/null || true
 hyprctl hyprpaper preload "$wall" >/dev/null || true
-mons=$(hyprctl -j monitors 2>/dev/null | awk -F'"' '/"name":/ {print $4}' || true)
+if command -v jq >/dev/null; then
+  mons=$(hyprctl -j monitors 2>/dev/null | jq -r '.[].name' || true)
+else
+  # Match only top-level "name": "<value>" (4-space indent) to avoid nested workspace fields
+  mons=$(hyprctl -j monitors 2>/dev/null | awk -F'"' '/^    "name":/ {print $4}' || true)
+fi
 if [ -z "$mons" ]; then
   hyprctl hyprpaper wallpaper ",$wall" >/dev/null || true
 else
