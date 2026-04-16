@@ -1,0 +1,5 @@
+* { font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; }
+window#waybar { background-color: rgba(46, 52, 64, 0.7); color: #eceff4; padding: 4px; }
+#workspaces button { color: #d8dee9; padding: 0 6px; }
+#workspaces button.active { color: #88c0d0; border-bottom: 2px solid #88c0d0; }
+#clock, #network, #pulseaudio { color: #88c0d0; padding: 0 6px; }
