@@ -1,0 +1,9 @@
+name          = "TEMPLATE"
+description   = "fill me in"
+accent        = "#888888"
+preview       = ".local/share/wallpapers/default.png"
+colorscheme   = "tokyonight"
+gtk_theme     = "Adwaita-dark"
+icon_theme    = "Adwaita"
+cursor_theme  = "Adwaita"
+cursor_size   = 24

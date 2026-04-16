@@ -1,0 +1,35 @@
+{
+  "layer": "top",
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": ["pulseaudio", "network", "clock"],
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%a, %d. %b  %H:%M}"
+  },
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{name}"
+  },
+  "pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-muted": " muted",
+    "format-icons": {
+      "default": ["", "", ""]
+    }
+  },
+  "hyprland/window": {
+    	"icon": true,
+	"format": "{}"
+  },
+  "network": {
+    "interface": "enp6s0",
+	  "format-disconnected": "", 
+	  "format-ethernet": "Up: {bandwidthUpBytes} | Down: {bandwidthDownBytes}",
+	  "tooltip-format-disconnected": "Disconnected",
+	  "max-length": 50,
+	  "interval": 2
+  }
+}
