@@ -1,0 +1,9 @@
+name          = "Default"
+description   = "Viking · cyan & green"
+accent        = "#33ccff"
+preview       = ".local/share/wallpapers/default.png"
+colorscheme   = "tokyonight"
+gtk_theme     = "Adwaita-dark"
+icon_theme    = "Adwaita"
+cursor_theme  = "Adwaita"
+cursor_size   = 24
