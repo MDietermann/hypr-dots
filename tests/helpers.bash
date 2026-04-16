@@ -2,8 +2,10 @@
 
 setup_fake_dotfiles() {
   TMP_ROOT=$(mktemp -d)
+  _ORIG_PATH="$PATH"
   export HOME="$TMP_ROOT/home"
   export STOW_DIR="$HOME/hypr-dots"
+  mkdir -p "$HOME"
   mkdir -p "$STOW_DIR" "$HOME/.config" "$HOME/.local/state/theme-switch"
   export REPO_ROOT="$BATS_TEST_DIRNAME/.."
   export PATH="$REPO_ROOT/hypr-base/bin:$REPO_ROOT/tests/stubs:$PATH"
@@ -12,6 +14,7 @@ setup_fake_dotfiles() {
 
 teardown_fake_dotfiles() {
   [ -n "${TMP_ROOT:-}" ] && rm -rf "$TMP_ROOT"
+  [ -n "${_ORIG_PATH:-}" ] && export PATH="$_ORIG_PATH"
 }
 
 make_fake_theme() {
