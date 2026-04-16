@@ -4,7 +4,7 @@ HERE=$(dirname "$(readlink -f "$0")")
 # shellcheck source=./theme-switch-lib.sh
 source "$HERE/theme-switch-lib.sh"
 
-command -v rofi >/dev/null || { theme-switch --list; exit 1; }
+command -v rofi >/dev/null || { "$HERE/theme-switch" --list; exit 1; }
 
 style="$HOME/.config/rofi/applets/type-5/theme-switch.rasi"
 cache="$HOME/.cache/theme-switch"
@@ -34,4 +34,4 @@ chosen=$(printf '%s' "$pick" | awk -F' — ' '{print $1}' | tr -d ' ')
 confirm=$(printf 'Yes\nNo\n' | rofi -dmenu -i -theme "$style" -p "Apply $chosen?")
 [ "$confirm" = "Yes" ] || exit 0
 
-exec theme-switch "$chosen"
+exec "$HERE/theme-switch" "$chosen"
