@@ -6,8 +6,10 @@ setup() {
   export THEME_SWITCH_TEST_LOG="$TMP_ROOT/calls.log"; : > "$THEME_SWITCH_TEST_LOG"
   mkdir -p "$HOME/.config/kitty"
   touch "$HOME/.config/kitty/kitty.conf"
+  export KITTY_SOCK_DIR="$TMP_ROOT/kitty-socks"
+  mkdir -p "$KITTY_SOCK_DIR"
 }
-teardown() { rm -f /tmp/kitty-11111 /tmp/kitty-22222; teardown_fake_dotfiles; }
+teardown() { teardown_fake_dotfiles; }
 
 @test "20-kitty: no sockets → exits 0, no calls" {
   run bash "$REPO_ROOT/hypr-base/bin/theme-hooks.d/20-kitty.sh" nord
@@ -16,9 +18,7 @@ teardown() { rm -f /tmp/kitty-11111 /tmp/kitty-22222; teardown_fake_dotfiles; }
 }
 
 @test "20-kitty: sockets present → kitten called once per socket" {
-  mkdir -p /tmp/theme-switch-test-sockets
-  export KITTY_SOCK_DIR=/tmp/theme-switch-test-sockets
-  touch /tmp/kitty-11111 /tmp/kitty-22222
+  touch "$KITTY_SOCK_DIR/kitty-11111" "$KITTY_SOCK_DIR/kitty-22222"
   run bash "$REPO_ROOT/hypr-base/bin/theme-hooks.d/20-kitty.sh" nord
   [ "$status" -eq 0 ]
   [ "$(grep -c '^kitten' "$THEME_SWITCH_TEST_LOG")" -eq 2 ]
