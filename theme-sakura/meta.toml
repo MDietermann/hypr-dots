@@ -1,0 +1,9 @@
+name         = "Sakura"
+description  = "kawaii · coral pink & gold"
+accent       = "#F4A3B0"
+preview      = ".local/share/wallpapers/sakura.png"
+colorscheme  = "rose-pine"
+gtk_theme    = "Adwaita-dark"
+icon_theme   = "Adwaita"
+cursor_theme = "Adwaita"
+cursor_size  = 24
