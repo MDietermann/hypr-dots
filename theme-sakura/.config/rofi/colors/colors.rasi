@@ -1,0 +1,14 @@
+/**
+ *
+ * theme-sakura palette
+ *
+ **/
+
+* {
+    background:     #2B1E2BFF;
+    background-alt: #3B2A3DFF;
+    foreground:     #F5E6D3FF;
+    selected:       #F4A3B0FF;
+    active:         #E8C974FF;
+    urgent:         #E8738AFF;
+}
