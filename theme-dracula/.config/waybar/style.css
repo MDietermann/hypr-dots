@@ -1,16 +1,15 @@
+@import 'colors/dracula.css';
+
 * {
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: FontAwesome, "JetBrains Mono", Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
 }
 
 window#waybar {
-    background-color: rgba(40, 42, 54, 0.0);
-    border-bottom: 3px solid rgba(98, 114, 164, 0.0);
-    color: #f8f8f2;
+    background: transparent;
+    color: @fg;
     padding: 4px;
-    transition-property: background-color;
-    transition-duration: .5s;
 }
 
 window#waybar.hidden {
@@ -33,36 +32,47 @@ button {
     transition: all ease-out 0.3s;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px #bd93f9;
-}
+
 
 /* you can set a style on hover for any module like this */
 #pulseaudio:hover {
     background-color: #6272a4;
 }
 
+#workspaces {
+  border-radius: 50px;
+  background-color: @bg0;
+  padding: 4;
+}
+
 #workspaces button {
     padding: 0 5px;
-    background-color: transparent;
-    border-radius: 8px;
-    color: rgba(248, 248, 242, 0.5);
+    background: @bg2;
+    color: transparent;
+    border-radius: 50px;
+    border: 1px solid @purple;
     margin: 4px;
+    transition: all .3s ease-in-out;
 }
 
 #workspaces button:hover {
-    background: rgba(98, 114, 164, 0.4);
+  min-width: 45px;
+  background: @bg4;
+  color: @fg;
+  background-size: 400%;
 }
 
 #workspaces button.focused, #workspaces button.active {
-    background-color: rgba(189, 147, 249, 0.25);
-    box-shadow: inset 0 -3px #bd93f9;
+    background-color: @bg4;
+    min-width: 45px;
+    background-size: 400%;
+    color: @purple;
 }
 
 #workspaces button.urgent {
-    background-color: #ff5555;
+    background-color: @red;
+    min-width: 45px;
+    background-size: 400%;
 }
 
 #mode {
@@ -71,28 +81,15 @@ button:hover {
 }
 
 #clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
 #network,
 #pulseaudio,
-#wireplumber,
-#custom-media,
 #tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#power-profiles-daemon,
 #mpd {
     color: rgba(248, 248, 242, 0.75);
-    background-color: transparent;
-    box-shadow: inset 0 -3px rgba(189, 147, 249, 0.25);
-    border-radius: 8px;
+    background-color: @bg0;
+    border-radius: 16px;
     margin: 4px;
-    padding: 0 5px;
+    padding: 8px;
 }
 
 #window,
@@ -114,38 +111,3 @@ label:focus {
     background-color: #282a36;
 }
 
-#custom-media {
-    background-color: #50fa7b;
-    color: #282a36;
-    min-width: 100px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #50fa7b;
-}
-
-#custom-media.custom-vlc {
-    background-color: #f1fa8c;
-}
-
-#tray {
-    background-color: #6272a4;
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: #ff5555;
-}
-
-#idle_inhibitor {
-    background-color: #44475a;
-}
-
-#idle_inhibitor.activated {
-    background-color: #f8f8f2;
-    color: #282a36;
-}

@@ -189,3 +189,18 @@ _theme_colors_precmd() {
 autoload -Uz add-zsh-hook                                 
 add-zsh-hook precmd _theme_colors_precmd
 
+
+# Java 17 (for Android SDK)
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Android SDK
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+export ANDROID_HOME="$ANDROID_SDK_ROOT"
+export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"
+
+# Flutter SDK
+export FLUTTER_ROOT="$HOME/.local/flutter"
+export PATH="$FLUTTER_ROOT/bin:$PATH"
